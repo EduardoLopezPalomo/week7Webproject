@@ -86,6 +86,29 @@ app.get('/api/secret', authenticateUser, (req, res) => {
     res.status(200).json({ message: 'Access to secret route granted' });
 });
 
+app.post('/api/todos', authenticateUser, (req, res) => {
+    const { todo } = req.body;
+    const { user } = req.session;
+  
+    const userTodosIndex = todos.findIndex(item => item.id === user.id);
+  
+    if (userTodosIndex === -1) {
+      const newTodoObject = {
+        id: user.id,
+        todos: [todo]
+      };
+      todos.push(newTodoObject);
+      return res.status(200).json(newTodoObject);
+    } else {
+      todos[userTodosIndex].todos.push(todo);
+      return res.status(200).json(todos[userTodosIndex]);
+    }
+});
+  
+app.get('/api/todos/list', (req, res) => {
+    res.status(200).json(todos);
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
