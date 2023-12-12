@@ -60,7 +60,20 @@ app.post('/api/user/login', (req, res) => {
       req.session.user = user;
       res.status(200).json({ message: 'Login successful' });
     });
-  });
+});
+
+const authenticateUser = (req, res, next) => {
+    if (req.session.user) {
+      next();
+    } else {
+      
+      res.status(401).json({ error: 'Not authenticated' });
+    }
+};
+  
+app.get('/api/secret', authenticateUser, (req, res) => {
+    res.status(200).json({ message: 'Access to secret route granted' });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
