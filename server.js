@@ -13,7 +13,14 @@ app.use(session({
 
 let users = [];
 
-app.post('/api/user/register', (req, res) => {
+const checkAuth = (req, res, next) => {
+    if (req.session.user) {
+      return res.redirect('/');
+    }
+    next();
+  };
+
+app.post('/api/user/register',checkAuth, (req, res) => {
   const { username, password } = req.body;
 
   const existingUser = users.find(user => user.username === username);
@@ -44,7 +51,7 @@ app.get('/api/user/list', (req, res) => {
   res.json(users);
 });
 
-app.post('/api/user/login', (req, res) => {
+app.post('/api/user/login',checkAuth, (req, res) => {
     const { username, password } = req.body;
   
     const user = users.find(user => user.username === username);
