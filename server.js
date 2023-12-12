@@ -30,7 +30,7 @@ app.post('/api/user/register', (req, res) => {
 
     users.push(newUser);
 
-    res.status(201).json(newUser);
+    res.status(200).json(newUser);
   });
 });
 
