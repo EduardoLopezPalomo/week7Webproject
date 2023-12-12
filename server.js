@@ -13,6 +13,10 @@ app.use(session({
 
 let users = [];
 
+app.get("/",(req,res)=>{
+    res.send("Hello world");
+});
+
 const checkAuth = (req, res, next) => {
     if (req.session.user) {
       return res.redirect('/');
