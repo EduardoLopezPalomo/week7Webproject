@@ -86,9 +86,13 @@ app.get('/api/secret', authenticateUser, (req, res) => {
     res.status(200).json({ message: 'Access to secret route granted' });
 });
 
-app.post('/api/todos', authenticateUser, (req, res) => {
+app.post('/api/todos', (req, res) => {
     const { todo } = req.body;
     const { user } = req.session;
+
+    if (!user) {
+        return res.status(401).json({ error: 'Not authenticated' });
+    }
   
     const userTodosIndex = todos.findIndex(item => item.id === user.id);
   
